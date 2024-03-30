@@ -1,0 +1,76 @@
+schema
+  @server(port: 8000, graphiql: true)
+  @upstream(baseURL: "https://api.stripe.com/v1/")
+  @link(src: "./types/balance.graphql", type: Config)
+  @link(src: "./types/customer.graphql", type: Config) {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  # BALANCE
+  balance: BalanceRoot
+    @http(
+      method: "GET"
+      path: "/balance"
+      headers: [{ key: "Authorization", value: "Bearer {{env.AUTH_TOKEN}}" }]
+    )
+
+  balancetrn: BalanceTransactionRoot
+    @http(
+      method: "GET"
+      path: "/balance_transactions"
+      headers: [{ key: "Authorization", value: "Bearer {{env.AUTH_TOKEN}}" }]
+    )
+
+  balanceData(id: String!): BalanceTransactionObject
+    @http(
+      method: "GET"
+      path: "/balance_transactions/{{args.id}}"
+      headers: [{ key: "Authorization", value: "Bearer {{env.AUTH_TOKEN}}" }]
+    )
+
+  #  CUSTOMER
+  retrieveCustomer(id: String!): CreateCustomerObject
+    @http(
+      method: "GET"
+      path: "/customers/{{args.id}}"
+      headers: [{ key: "Authorization", value: "Bearer {{env.AUTH_TOKEN}}" }]
+    )
+
+  listAllCustomer: CustomerRoot
+    @http(
+      method: "GET"
+      path: "/customers"
+      headers: [{ key: "Authorization", value: "Bearer {{env.AUTH_TOKEN}}" }]
+    )
+}
+
+type Mutation {
+  #  CUSTOMERS
+  addCustomer(input: CreateCustomerInput): CreateCustomerObject
+    @http(
+      method: "POST"
+      path: "/customers"
+      encoding: "ApplicationXWwwFormUrlencoded"
+      headers: [{ key: "Authorization", value: "Bearer {{env.AUTH_TOKEN}}" }]
+      body: "{{args.input}}"
+    )
+
+  updateCustomer(input: CreateCustomerInput, id: String!): CreateCustomerObject
+    @http(
+      method: "POST"
+      path: "/customers/{{args.id}}"
+      encoding: "ApplicationXWwwFormUrlencoded"
+      headers: [{ key: "Authorization", value: "Bearer {{env.AUTH_TOKEN}}" }]
+      body: "{{args.input}}"
+    )
+
+  deleteCustomer(id: String!): DeleteCustomer
+    @http(
+      method: "DELETE"
+      path: "/customers/{{args.id}}"
+      encoding: "ApplicationXWwwFormUrlencoded"
+      headers: [{ key: "Authorization", value: "Bearer {{env.AUTH_TOKEN}}" }]
+    )
+}

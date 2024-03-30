@@ -1,0 +1,61 @@
+# Balance Schema
+
+type Balance {
+  amount: Int
+  currency: String
+  source_types: SourceTypes
+}
+
+type SourceTypes {
+  card: Int
+}
+
+type ConnectReserved {
+  amount: Int
+  currency: String
+}
+
+type BalanceRoot {
+  object: String
+  livemode: Boolean
+  pending: [Balance]
+  connect_reserved: [ConnectReserved]
+  available: [Balance]
+}
+
+# Balance Transaction
+
+type BalanceTransactionRoot{
+	object: String
+	has_more: Boolean
+	url: String
+	data: [BalanceTransactionObject] 
+}
+
+type BalanceTransactionObject {
+  id: String
+  object: String
+  amount: Int
+  available_on: Int
+  created: Int
+  cross_border_classification: String
+  currency: String
+  description: String
+  exchange_rate: String
+  fee: Int
+  net: Int
+  reporting_category: String
+  source: String
+  status: String
+  type: String
+  fee_details: [FeeDetails]
+}
+
+type FeeDetails {
+  amount: Int
+  application: String
+  currency: String
+  description: String
+  type: String
+}
+
