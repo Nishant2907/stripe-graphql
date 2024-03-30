@@ -17,6 +17,14 @@ tailcall
 ```
 
 ## Launch
+
+### Env
+Add a .env file wiht your secret stripe api into it
+```
+AUTH_TOKEN= "your-secret-stripe-api"
+```
+
+Now, run the following command to start the server with the full path to the file that you created earlier.
 ```
 tailcall start ./schema.graphql
 ```
